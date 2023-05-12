@@ -141,8 +141,7 @@ I want to express my sincere gratitude towards my supervisors Dr Chris Town and 
 
 \chapter{Introduction}
 
-Today, deep-sea marine ecosystems are more threatened by human activities than ever before. With an ever-growing need to monitor marine ecosystems, experts have long relied on robots for marine conservation.
-An autonomous underwater vehicle (AUV) is a robot that travels underwater without human inputs. AUVs today are often used for data collection, but their ability to analyse data remains limited.  Recently, advancements in artificial intelligence and robotics have saw an emergence of smart autonomous robots. In particular, efficient object detection techniques allow robots to make sense of their environment, enabling new capabilities like autonomous driving and drone delivery. Bringing advanced techniques to AUVs could unlock many new applications. This project aims to enable AUVs to automatically detect and classify marine creatures.
+Today, automonous robots plays a major role in the preservation of marine ecosystems. Autonomous underwater vehicles (AUVs) are robots that travel underwater without human input. AUVs today are often used for data collection, but their ability to analyse data remains limited.  Recently, advancements in artificial intelligence and robotics have saw an emergence of smart autonomous robots. In particular, efficient object detection techniques allow robots to make sense of their environment, enabling new capabilities like autonomous driving and drone delivery. This project aims to enable AUVs to automatically detect and classify marine creatures.
 
 \section{Aims}
 This project aims to produce an efficient object detection software to detect marine creatures in video footage. The software shall produce bounding boxes around detected creatures and classify them into taxonomic classes. The project focusses on \textit{sessile benthic} animals, which refers to slow-moving creatures that live near the sea floor. 
@@ -150,7 +149,7 @@ This project aims to produce an efficient object detection software to detect ma
 \section{Existing Work}
 There is a rich body of work in the field of automatic detection and classification of marine creatures. Marcos et al. \cite{marcos_classification_2005} used normalised chromaticity coordinates (NCC), hue saturation values (HSV) and local binary patterns (LBP) as input features into a neural network, achieving 86.5\% accuracy over 300 images. The work is limited by the small scale of the dataset and the lack of granularity in classification, with the model only differentiating between two classes of coral reefs and the background. Pizarro et al. \cite{pizarro_towards_2008}, which proposed a more robust approach using NCC, Scale-Invariant Feature Transforms (SIFT) and image saliency metrics, achieved accurate classification over 8 classes.
 
-More recent research applied convolutional neural network (CNN) object detection models for improved results. Li et al. \cite{li_fast_2015} trained Fast R-CNN \cite{girshick_fast_2015} on a dataset of 24277 images of fish in 12 classes. They found that Fast R-CNN outperformed classic approaches and achieved a \textit{mean average precision} (defined in section \ref{section:define_mAP}) of 0.814. Böer et al. \cite{boer_deep-learning_2023} built a model based on the YOLO \cite{redmon_you_2016} architecture which classified marine organisms in stereo image input. 
+More recent research applied convolutional neural network (CNN) object detection models for improved results. Li et al. \cite{li_fast_2015} trained Fast R-CNN \cite{girshick_fast_2015} on a dataset of 24277 images of fish in 12 classes. They found that Fast R-CNN outperformed classic approaches and achieved a \textit{mean average precision} (defined in section \ref{section:define_mAP}) of 0.814. 
 
 \chapter{Preparation}
 
@@ -255,15 +254,16 @@ The code structure of this project is as follows:
 \begin{center}
     \input{dir_structure}
 \end{center}
-\begin{itemize}
+\begin{itemize}\itemsep0em
     \item \verb|efficientnet|, \verb|efficientdet| and \verb|yolite| contains my implmentations of models EfficientNet \cite{tan_efficientnet_2020}, EfficientDet \cite{tan_efficientdet_2020} and YoLite, which is proposed in this project
+    \item \verb|train_yolite.py| and \verb|tune_yolite.py| runs training and hyperparameter tuning for YoLite.
     \item \verb|exgen| contains the training example generator, which can be ran with \verb|exgen.py|
     \item \verb|dataset| contains code for data loading and manipulation
     \item \verb|tests| contains unit tests
     \item \verb|utils| contains useful functions for the entire project
-    \item \verb|train.py| and \verb|tune.py| runs distributed training and hyperparameter tuning. They share many functions that are stored in \verb|training|. 
+    \item \verb|train.py| and \verb|tune.py| runs distributed training and hyperparameter tuning for EfficientDet. They share many functions that are stored in \verb|training|. 
+    \item \verb|video_detector.py| uses trained EfficientDet models to detect marine organisms in video
 \end{itemize}
-
 All code listed was written from scratch. 
 
 \section{Dataset}
@@ -795,10 +795,6 @@ To further enable code reuse, I designed the \textit{hook} system . A hook can e
 
 The flexibility of this system is demonstrated in its ability to support hyperparameter tuning. Each hyperparameter tuning class simply inherits from the normal training class and adds an additional hyperparameter tuning hook. This new hook is responsible for communication with the database and could trigger an early termination if needed. 
 
-Instead of rewriting this code for every training loop, 
-
-
-\verb|Distr|
 
 
 \chapter{Evaluation}
@@ -888,7 +884,7 @@ During testing, calculating just one mAP and just one mIoU value for the entire 
         \hline
         \hline
         EfficientDet-D0          &&\\
-        without Contrastive Loss & -    & -\\
+        without Contrastive Loss & 0.412 \pm 0.094  & 0.081 \pm 0.007\\
         with Contrastive Loss    & 0.429 \pm 0.095  & 0.086 \pm 0.006\\
         \hline
         \textbf{EfficientDet-D2}          &&\\
@@ -896,11 +892,12 @@ During testing, calculating just one mAP and just one mIoU value for the entire 
         \textbf{with Contrastive Loss}   & \textbf{0.473 \pm 0.110}  & \textbf{0.114 \pm 0.006}\\
         \hline
     \end{tabular}
-    \caption{\textbf{Results of model evaluation} Showing mAP and mIoU values of models evaluated. For both metrics, the higher the better.}
+    \caption{\textbf{Results of model evaluation} Showing mean mAP and mIoU values of models evaluated and the 95\% confidence intervals. For both metrics, the higher the better.}
     \label{table:eval_results}
 \end{table}
 
-Table \ref{table:eval_results} shows the results of model evaluations. The data shows that both EfficientDet-D0 and EfficientDet-D2 performed better in both mAP and mIoU when trained with supervised contrastive loss. Unsurprisingly, EfficientDet-D2 consistently outperformed EfficientDet-D0.
+Table \ref{table:eval_results} shows the results of model evaluations. 
+The data shows that supervised contrastive loss consistently improved EfficientDet performance in both mAP and mIoU.
 
 \subsection{Success Criteria}
 For mAP, my best performing model achieved the success criteria of 0.55 within the 95\% error margin, achieving the success criteria. However, my results for mIoU were significantly lower than the 0.22 I set out to achieve. Intuitively, mIoU is likely to be affected by the quality of the data, as missing and incorrect annotations quickly reduce the amount of reasonable overlap between detection and annotation. My decision not to manually clean the dataset could have had a major negative impact here. However, mAP is a widely accepted metric that measures both classification and detection performance, making it more indicative of model performance.
@@ -1014,7 +1011,7 @@ The project achieved its core objective of delivering an efficient software that
 In addition, the project proposed, implemented and evaluated a pioneering approach for supervised contrastive learning for object detection. The project also overcame the limitation in available data by implementing a fully functional training example generator. The training example generator performs transformations on individual creatures, offering data augmentation tailored for object detection.
 
 \section{Future Works}
-This project is limited to an image object detection model. In potential area of investigation is applying video object detection techniques on deep-sea marine creatures.
+This project is limited to an image object detection model. It would be interesting to apply video object detection techniques on deep-sea marine creatures.
 
 In recent year, Transformer models have been increasingly used for computer vision. It would be interesting to compare a transformer-based objection architecture like DETR \cite{carion_end--end_2020} with CNN-based architectures for the task of marine organism detection.
 
