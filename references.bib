@@ -1,4 +1,33 @@
 
+@misc{bolya_yolact_2019,
+	title = {{YOLACT}: {Real}-time {Instance} {Segmentation}},
+	shorttitle = {{YOLACT}},
+	url = {http://arxiv.org/abs/1904.02689},
+	doi = {10.48550/arXiv.1904.02689},
+	abstract = {We present a simple, fully-convolutional model for real-time instance segmentation that achieves 29.8 mAP on MS COCO at 33.5 fps evaluated on a single Titan Xp, which is significantly faster than any previous competitive approach. Moreover, we obtain this result after training on only one GPU. We accomplish this by breaking instance segmentation into two parallel subtasks: (1) generating a set of prototype masks and (2) predicting per-instance mask coefficients. Then we produce instance masks by linearly combining the prototypes with the mask coefficients. We find that because this process doesn't depend on repooling, this approach produces very high-quality masks and exhibits temporal stability for free. Furthermore, we analyze the emergent behavior of our prototypes and show they learn to localize instances on their own in a translation variant manner, despite being fully-convolutional. Finally, we also propose Fast NMS, a drop-in 12 ms faster replacement for standard NMS that only has a marginal performance penalty.},
+	urldate = {2023-05-12},
+	publisher = {arXiv},
+	author = {Bolya, Daniel and Zhou, Chong and Xiao, Fanyi and Lee, Yong Jae},
+	month = oct,
+	year = {2019},
+	note = {arXiv:1904.02689 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition},
+}
+
+@misc{carion_end--end_2020,
+	title = {End-to-{End} {Object} {Detection} with {Transformers}},
+	url = {http://arxiv.org/abs/2005.12872},
+	doi = {10.48550/arXiv.2005.12872},
+	abstract = {We present a new method that views object detection as a direct set prediction problem. Our approach streamlines the detection pipeline, effectively removing the need for many hand-designed components like a non-maximum suppression procedure or anchor generation that explicitly encode our prior knowledge about the task. The main ingredients of the new framework, called DEtection TRansformer or DETR, are a set-based global loss that forces unique predictions via bipartite matching, and a transformer encoder-decoder architecture. Given a fixed small set of learned object queries, DETR reasons about the relations of the objects and the global image context to directly output the final set of predictions in parallel. The new model is conceptually simple and does not require a specialized library, unlike many other modern detectors. DETR demonstrates accuracy and run-time performance on par with the well-established and highly-optimized Faster RCNN baseline on the challenging COCO object detection dataset. Moreover, DETR can be easily generalized to produce panoptic segmentation in a unified manner. We show that it significantly outperforms competitive baselines. Training code and pretrained models are available at https://github.com/facebookresearch/detr.},
+	urldate = {2023-05-12},
+	publisher = {arXiv},
+	author = {Carion, Nicolas and Massa, Francisco and Synnaeve, Gabriel and Usunier, Nicolas and Kirillov, Alexander and Zagoruyko, Sergey},
+	month = may,
+	year = {2020},
+	note = {arXiv:2005.12872 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition},
+}
+
 @misc{li_hyperband_2018,
 	title = {Hyperband: {A} {Novel} {Bandit}-{Based} {Approach} to {Hyperparameter} {Optimization}},
 	shorttitle = {Hyperband},
@@ -369,7 +398,7 @@ Publisher: Multidisciplinary Digital Publishing Institute},
 	year = {2022},
 }
 
-@misc{bolya_yolact_2019,
+@misc{bolya_yolact_2019-1,
 	title = {{YOLACT}: {Real}-time {Instance} {Segmentation}},
 	shorttitle = {{YOLACT}},
 	url = {http://arxiv.org/abs/1904.02689},
